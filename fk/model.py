@@ -137,7 +137,7 @@ def stimulate(t, X, stimuli):
         # active = np.greater_equal(t, stimulus["start"])
         # active &= (np.mod(stimulus["start"] - t + 1, stimulus["period"]) < stimulus["duration"])
         active = np.greater_equal(t ,stimulus["start"])
-        active &= np.grater_equal(stimulus["start"] + stimulus["duration"],t)
+        active &= np.greater_equal(stimulus["start"] + stimulus["duration"],t)
         stimulated = np.where(stimulus["field"] * (active), stimulus["field"], stimulated)
     return np.where(stimulated != 0, stimulated, X)
 
