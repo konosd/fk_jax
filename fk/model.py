@@ -44,7 +44,11 @@ def init(shape):
     v = np.ones(shape)
     w = np.ones(shape)
     u = np.zeros(shape)
-    state = (v, w, u)
+
+    at = np.zeros(shape) # activation time
+    max_du = np.zeros(shape) # keep track of maximum du/dt
+
+    state = (v, w, u, at, max_du)
     state = np.asarray(state)
     print("Updated!") #Kostas
     return state
@@ -52,7 +56,7 @@ def init(shape):
 
 @jax.jit
 def step(state, t, params, D, stimuli, dt, dx):
-    v, w, u = state
+    v, w, u, at, max_du = state
 
     # apply stimulus
     u = stimulate(t, u, stimuli)
@@ -101,11 +105,17 @@ def step(state, t, params, D, stimuli, dt, dx):
 
     d_u = D * (u_xx + u_yy) + extra_term + I_ion
     
+    # checking du for activation time update
+    at = np.where(np.greater_equal(d_u,max_du), t, at)
+    max_du = np.where(np.greater_equal(d_u,max_du), d_u, max_du)
+
     # euler update
     v += d_v * dt
     w += d_w * dt
     u += d_u * dt
-    return np.asarray((v, w, u))
+
+    
+    return np.asarray((v, w, u, at, max_du))
 
 
 @functools.partial(jax.jit, static_argnums=1)
@@ -138,6 +148,7 @@ def stimulate(t, X, stimuli):
         # active &= (np.mod(stimulus["start"] - t + 1, stimulus["period"]) < stimulus["duration"])
         active = np.greater_equal(t ,stimulus["start"])
         active &= np.greater_equal(stimulus["start"] + stimulus["duration"],t)
+        active = (np.mod(t - stimulus["start"], stimulus["period"]) < stimulus["duration"]) # this works for cyclics
         stimulated = np.where(stimulus["field"] * (active), stimulus["field"], stimulated)
     return np.where(stimulated != 0, stimulated, X)
 
