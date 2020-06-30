@@ -8,7 +8,7 @@ def init(path, shape, n_iter, n_stimuli):
     hdf5 = h5py.File(path, "w")
     if "states" not in hdf5:
         # shape is (t, 3, w, h), where 3 is the tree fk variable
-        dset_states = hdf5.create_dataset("states", shape=(n_iter, 5, *shape), dtype="float32")
+        dset_states = hdf5.create_dataset("states", shape=(n_iter, 3, *shape), dtype="float32")
     if "stimuli" not in hdf5:
         dset_stim = hdf5.create_dataset("stimuli", shape=(n_stimuli, *shape), dtype="float32")
     return hdf5
@@ -43,6 +43,7 @@ def add_stimuli(hdf5, stimuli, shape=None):
 
 def add_state(dset, state, t, shape=None):
     if shape is not None:
+        state = state[0:3]
         state = imresize(state, shape)
     dset[t] = state
     return True
