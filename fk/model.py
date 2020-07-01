@@ -45,10 +45,10 @@ def init(shape):
     w = np.ones(shape)
     u = np.zeros(shape)
 
-    at = np.zeros(shape) # activation time
-    max_du = np.zeros(shape) # keep track of maximum du/dt
+    # at = np.zeros(shape) # activation time
+    # max_du = np.zeros(shape) # keep track of maximum du/dt
 
-    state = (v, w, u, at, max_du)
+    state = (v, w, u)
     state = np.asarray(state)
     print("Updated!") #Kostas
     return state
