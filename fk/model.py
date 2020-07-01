@@ -56,7 +56,8 @@ def init(shape):
 
 @jax.jit
 def step(state, t, params, D, stimuli, dt, dx):
-    v, w, u, at, max_du = state
+    # v, w, u, at, max_du = state
+    v, w, u = state
 
     # apply stimulus
     u = stimulate(t, u, stimuli)
@@ -106,8 +107,8 @@ def step(state, t, params, D, stimuli, dt, dx):
     d_u = D * (u_xx + u_yy) + extra_term + I_ion
     
     # checking du for activation time update
-    at = np.where(np.greater_equal(d_u,max_du), t, at)
-    max_du = np.where(np.greater_equal(d_u,max_du), d_u, max_du)
+    # at = np.where(np.greater_equal(d_u,max_du), t, at)
+    # max_du = np.where(np.greater_equal(d_u,max_du), d_u, max_du)
 
     # euler update
     v += d_v * dt
@@ -115,7 +116,7 @@ def step(state, t, params, D, stimuli, dt, dx):
     u += d_u * dt
 
     
-    return np.asarray((v, w, u, at, max_du))
+    return np.asarray((v, w, u))
 
 
 @functools.partial(jax.jit, static_argnums=1)

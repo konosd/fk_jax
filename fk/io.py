@@ -42,7 +42,7 @@ def add_stimuli(hdf5, stimuli, shape=None):
         
 
 def add_state(dset, state, t, shape=None):
-    state = state[0:3]
+    # state = state[0:3]
     if shape is not None:
         state = imresize(state, shape)
     dset[t] = state

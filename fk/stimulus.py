@@ -2,7 +2,7 @@ import jax
 import jax.numpy as np
 from scipy.ndimage.interpolation import rotate
 import random
-from . import convert
+from fk import convert
 
 def protocol(start, duration, period=None):
     """

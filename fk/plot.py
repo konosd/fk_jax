@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import IPython
 from IPython.display import HTML
 import math
-from . import convert
+from fk import convert
 
 
 def show_stimuli(*stimuli, **kwargs):
