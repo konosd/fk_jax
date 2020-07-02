@@ -10,7 +10,7 @@ def params_to_units(params, dx, dt):
     params["tau_v_plus"] /= dt
     params["tau_0"] /= dt
     params["tau_r"] /= dt
-    params["tau_si"] /= dt
+    params["tau_spi"] /= dt
     params["tau_w_minus"] /= dt
     params["tau_w_plus"] /= dt
     return params
