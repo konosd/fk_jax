@@ -60,7 +60,7 @@ def step(state, t, params, D, stimuli, dt, dx):
     v, w, u = state
 
     # apply stimulus
-    u = stimulate(t, u, stimuli)
+    # u = stimulate(t, u, stimuli)
 
     # apply boundary conditions
     v = neumann(v)
@@ -102,9 +102,13 @@ def step(state, t, params, D, stimuli, dt, dx):
     D_x /= dx
     D_y /= dx
     extra_term = D_x*u_x + D_y*u_y
+
+    current_stimuli = np.zeros(u.shape)
+    current_stimuli = stimulate(t, current_stimuli, stimuli)
 # Kostas ---------
 
-    d_u = D * (u_xx + u_yy) + extra_term + I_ion
+
+    d_u = D * (u_xx + u_yy) + extra_term + I_ion + current_stimuli
     
     # checking du for activation time update
     # at = np.where(np.greater_equal(d_u,max_du), t, at)
@@ -143,6 +147,19 @@ def neumann(X):
 
 @jax.jit
 def stimulate(t, X, stimuli):
+    stimulated = np.zeros_like(X)
+    for stimulus in stimuli:
+        # active = np.greater_equal(t, stimulus["start"])
+        # active &= (np.mod(stimulus["start"] - t + 1, stimulus["period"]) < stimulus["duration"])
+        active = np.greater_equal(t ,stimulus["start"])
+        active &= np.greater_equal(stimulus["start"] + stimulus["duration"],t)
+        active = (np.mod(t - stimulus["start"], stimulus["period"]) < stimulus["duration"]) # this works for cyclics
+        stimulated = np.where(stimulus["field"] * (active), stimulus["field"], stimulated)
+    return np.where(stimulated != 0, stimulated, X)
+
+
+@jax.jit
+def current_stimulate(t, X, stimuli):
     stimulated = np.zeros_like(X)
     for stimulus in stimuli:
         # active = np.greater_equal(t, stimulus["start"])
