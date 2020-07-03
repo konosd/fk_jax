@@ -13,7 +13,8 @@ def forward(shape,
             cell_parameters,
             diffusivity,
             stimuli,
-            dt, dx):
+            dt, dx,
+            probes_list):
     """
     Solves the Fenton-Karma model using second order finite difference and explicit euler update scheme.
     Neumann conditions are considered at the boundaries.
@@ -26,17 +27,23 @@ def forward(shape,
         stimuli (List[Dict[string, object]]): A list of stimuli to provide energy to the tissue
         dt (float): time infinitesimal to use in the euler stepping scheme
         dx (float): space infinitesimal to use in the spatial gradient calculation
+        probes_list (list of Tuples[int,int]): locations of probes to measure voltage
     Returns:
         (List[jax.numpy.ndarray]): The list of states at each checkpoint
     """
     state = init(shape)
+    probes = [np.ones(len(checkpoints-1))]*len(probes_list)
     states = []
     for i in range(len(checkpoints) - 1):
         print("Solving at: %dms/%dms\t\t" % (checkpoints[i + 1], checkpoints[-1]), end="\r")
         state = _forward(state, checkpoints[i], checkpoints[i + 1], cell_parameters, np.ones(shape) * diffusivity, stimuli, dt, dx)
+        for p in range(len(probes)):
+            x_probe,y_probe = probes_list[p]
+            val = state[2][x_probe,y_probe]
+            probes[p]=jax.ops.index_update(probes[p], i, val)
         plot.show(state)
         states.append(state[2])
-    return states
+    return states, probes
 
 
 @functools.partial(jax.jit, static_argnums=0)

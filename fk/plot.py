@@ -16,10 +16,13 @@ def show_stimuli(*stimuli, **kwargs):
     vmin = kwargs.pop("vmin", -1)
     vmax = kwargs.pop("vmax", 1)
     cmap = kwargs.pop("cmap", "RdBu")
+    save = kwargs.pop("save", False)
     for i, stimulus in enumerate(stimuli):
         im = ax[i].imshow(stimulus["field"], vmin=vmin, vmax=vmax, cmap=cmap, **kwargs)
         plt.colorbar(im, ax=ax[i])
         ax[i].set_title("Stimulus %d" % i)
+    if save==True:
+        plt.savefig('sim/stimuli.png', bbox_inches='tight')
     plt.show()
     return
 
@@ -30,6 +33,7 @@ def show(state, **kwargs):
     vmax = kwargs.pop("vmax", 1)
     cmap = kwargs.pop("cmap", "RdBu")
     time = kwargs.pop("timestep", 0)
+    save = kwargs.pop("save", False)
     im = ax[0].imshow(state[0], vmin=vmin, vmax=vmax, cmap=cmap, **kwargs)
     plt.colorbar(im, ax=ax[0],fraction=0.046, pad = 0.04)
     ax[0].set_title("v")
@@ -41,6 +45,8 @@ def show(state, **kwargs):
     ax[2].set_title("u")
     fig.tight_layout()
     fig.suptitle('Timestep '+str(time))
+    if save==True:
+        plt.savefig('sim/state'+time+".png", bbox_inches='tight')
     plt.show()
     return fig, ax
 
