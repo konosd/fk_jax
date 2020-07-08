@@ -46,7 +46,7 @@ def show(state, **kwargs):
     fig.tight_layout()
     fig.suptitle('Timestep '+str(time))
     if save==True:
-        plt.savefig('sim/state'+time+".png", bbox_inches='tight')
+        plt.savefig('sim/state'+str(time)+".png", bbox_inches='tight')
     plt.show()
     return fig, ax
 

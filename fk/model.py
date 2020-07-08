@@ -62,12 +62,13 @@ def init(shape):
 
 
 @jax.jit
-def step(state, t, params, D, stimuli, dt, dx):
+def step(state, t, params, D, stimuli, dt, dx, current_stimulus=False):
     # v, w, u, at, max_du = state
     v, w, u = state
 
     # apply stimulus
-    # u = stimulate(t, u, stimuli)
+    if current_stimulus==False:
+        u = stimulate(t, u, stimuli)
 
     # apply boundary conditions
     v = neumann(v)
@@ -110,8 +111,10 @@ def step(state, t, params, D, stimuli, dt, dx):
     D_y /= dx
     extra_term = D_x*u_x + D_y*u_y
 
+
     current_stimuli = np.zeros(u.shape)
-    current_stimuli = stimulate(t, current_stimuli, stimuli)
+    if current_stimulus==True:
+        current_stimuli = stimulate(t, current_stimuli, stimuli)
 # Kostas ---------
 
 
