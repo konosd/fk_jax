@@ -4,7 +4,7 @@ from scipy.ndimage.interpolation import rotate
 import random
 from fk import convert
 
-def protocol(start, duration, period=None):
+def protocol(start, duration, period=None, current = True):
     """
     Generates a time protocol to manage the simulus by start time, duration and eventual period.
     Args:
@@ -18,6 +18,7 @@ def protocol(start, duration, period=None):
         "start": int(start),
         "duration": int(duration),
         "period": int(period)
+        "current": current
     }
 
 

@@ -62,10 +62,11 @@ def init(shape):
 
 
 @jax.jit
-def step(state, t, params, D, stimuli, dt, dx, current_stimulus=False):
+def step(state, t, params, D, stimuli, dt, dx):
     # v, w, u, at, max_du = state
     v, w, u = state
 
+    current_stimulus = stimuli[0]['current']
     # apply stimulus
     if current_stimulus==False:
         u = stimulate(t, u, stimuli)
