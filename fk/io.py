@@ -54,7 +54,7 @@ def append_states(dset, states, start, end):
     return True
         
     
-def load(path, dataset, start, end, step=None):
+def load(path, dset, start, end, step=None):
     with h5py.File(path, "r") as file:
         return [file[dset][start:end:step] for dset in file]
     

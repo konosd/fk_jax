@@ -66,10 +66,8 @@ def step(state, t, params, D, stimuli, dt, dx):
     # v, w, u, at, max_du = state
     v, w, u = state
 
-    current_stimulus = stimuli[0]['current']
     # apply stimulus
-    if current_stimulus==False:
-        u = stimulate(t, u, stimuli)
+    u = np.where(params["current_stimulus"], u, stimulate(t, u, stimuli))
 
     # apply boundary conditions
     v = neumann(v)
@@ -114,8 +112,8 @@ def step(state, t, params, D, stimuli, dt, dx):
 
 
     current_stimuli = np.zeros(u.shape)
-    if current_stimulus==True:
-        current_stimuli = stimulate(t, current_stimuli, stimuli)
+    current_stimuli = np.where(params["current_stimulus"], stimulate(t, current_stimuli, stimuli), current_stimuli)
+
 # Kostas ---------
 
 

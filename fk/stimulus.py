@@ -18,7 +18,6 @@ def protocol(start, duration, period=None, current = True):
         "start": int(start),
         "duration": int(duration),
         "period": int(period)
-        "current": current
     }
 
 

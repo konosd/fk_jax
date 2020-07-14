@@ -17,6 +17,7 @@ def _params1():
         "V_c": 0.13,
         "V_v": 0.0055,
         "Cm": 1,  # membrane capacitance (microF / cm^2)
+        "current_stimulus":True,
     }
     return params
 
@@ -67,6 +68,7 @@ def params2():
         "V_c": 0.13,
         "V_v": _maxfloat,
         "Cm": 1,  # membrane capacitance (microF / cm^2)
+        "current_stimulus":True,
     }
 
 
@@ -86,6 +88,7 @@ def params3():
         "V_c": 0.13,
         "V_v": 0.04,
         "Cm": 1,  # membrane capacitance (microF / cm^2)
+        "current_stimulus":True,
     }
 
 
@@ -105,6 +108,7 @@ def _params4():
         "V_c": 0.15,
         "V_v": 0.04,
         "Cm": 1,  # membrane capacitance (microF / cm^2)
+        "current_stimulus":True,
     }
 
 
@@ -142,6 +146,7 @@ def params5():
         "V_c": 0.13,
         "V_v": 0.04,
         "Cm": 1,  # membrane capacitance (microF / cm^2)
+        "current_stimulus":True,
     }
 
 
@@ -161,6 +166,7 @@ def params6():
         "V_c": 0.13,
         "V_v": 0.04,
         "Cm": 1,  # membrane capacitance (microF / cm^2)
+        "current_stimulus":True,
     }
 
 
@@ -180,6 +186,7 @@ def params7():
         "V_c": 0.13,
         "V_v": _maxfloat,
         "Cm": 1,  # membrane capacitance (microF / cm^2)
+        "current_stimulus":True,
     }
 
 
@@ -199,6 +206,7 @@ def params8():
         "V_c": 0.13,
         "V_v": 0.04,
         "Cm": 1,  # membrane capacitance (microF / cm^2)
+        "current_stimulus":True,
     }
 
 
@@ -218,6 +226,7 @@ def params9():
         "V_c": 0.13,
         "V_v": 0.05,
         "Cm": 1,  # membrane capacitance (microF / cm^2)
+        "current_stimulus":True,
     }
 
 
@@ -237,6 +246,7 @@ def params10():
         "V_c": 0.13,
         "V_v": 0.0025,
         "Cm": 1,  # membrane capacitance (microF / cm^2)
+        "current_stimulus":True,
     }
 
 
@@ -257,4 +267,5 @@ def params_test():
         "tau_w_minus": 400,  # Slow_inward_current_w_gate (ms)
         "tau_w_plus": 300,  # Slow_inward_current_w_gate (ms)
         "D": 0.05,  # diffusivity (cm^2/ms)
+        "current_stimulus":True,
     }
