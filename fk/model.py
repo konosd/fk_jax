@@ -147,10 +147,14 @@ def gradient(a, axis):
 
 @jax.jit
 def neumann(X):
-    X = jax.ops.index_update(X, jax.ops.index[0], X[1])
-    X = jax.ops.index_update(X, jax.ops.index[-1], X[-2])
-    X = jax.ops.index_update(X, jax.ops.index[..., 0], X[..., 1])
-    X = jax.ops.index_update(X, jax.ops.index[..., -1], X[..., -2])
+    # X = jax.ops.index_update(X, jax.ops.index[0], X[1])
+    # X = jax.ops.index_update(X, jax.ops.index[-1], X[-2])
+    # X = jax.ops.index_update(X, jax.ops.index[..., 0], X[..., 1])
+    # X = jax.ops.index_update(X, jax.ops.index[..., -1], X[..., -2])
+    X = jax.ops.index_update(X, jax.ops.index[0], (18*X[1]/11 - 18*X[2]/22 + 6*X[3]/33))
+    X = jax.ops.index_update(X, jax.ops.index[-1], (18*X[-2]/11 - 18*X[-3]/22 + 6*X[-4]/33))
+    X = jax.ops.index_update(X, jax.ops.index[..., 0], (18*X[...,1]/11 - 18*X[...,2]/22 + 6*X[...,3]/33))
+    X = jax.ops.index_update(X, jax.ops.index[..., -1], (18*X[...,-2]/11 - 18*X[...,-3]/22 + 6*X[...,-4]/33))
     return X
 
 
