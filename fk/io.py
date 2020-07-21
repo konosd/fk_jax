@@ -91,5 +91,5 @@ def load_params(filepath):
     
 def imresize(array, shape):
     for ar in array:
-        ar = np.array(Image.fromarray(onp.asarray(arr)).resize(shape))
+        ar = np.array(Image.fromarray(onp.asarray(ar)).resize(shape))
     return array
