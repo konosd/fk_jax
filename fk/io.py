@@ -2,6 +2,7 @@ import h5py
 import os
 import jax.numpy as np
 from PIL import Image
+import numpy as onp
 
 
 def init(path, shape, n_iter, n_stimuli):
@@ -89,4 +90,6 @@ def load_params(filepath):
     
     
 def imresize(array, shape):
-    return np.array(Image.fromarray(array).resize(shape))
+    for ar in array:
+        ar = np.array(Image.fromarray(onp.asarray(arr)).resize(shape))
+    return array
