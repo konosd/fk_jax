@@ -18,7 +18,7 @@ def init(path, shape, n_iter, n_stimuli):
 def add_params(hdf5, params, diffusivity, dt, dx, shape=None):
     #reshape
     if shape is not None:
-        diffusivity = imresize(diffusivity, shape)
+        diffusivity = imresize(np.expand_dims(diffusivity,0), shape)
     # store
     hdf5.create_dataset("params/D", data=diffusivity)
     hdf5.create_dataset("params/dt", data=dt)
@@ -31,7 +31,7 @@ def add_params(hdf5, params, diffusivity, dt, dx, shape=None):
 def add_stimuli(hdf5, stimuli, shape=None):
     # reshape
     if shape is not None:
-        fields = [imresize(stimuli[i]["field"], shape) for i in range(len(stimuli))]
+        fields = [imresize(np.expand_dims(stimuli[i]["field"],0), shape) for i in range(len(stimuli))]
     else:
         fields = [stimuli[i]["field"] for i in range(len(stimuli))]
     hdf5.create_dataset("field", data=fields)
@@ -90,6 +90,7 @@ def load_params(filepath):
     
     
 def imresize(array, shape):
+    resized = []
     for ar in array:
-        ar = np.array(Image.fromarray(onp.asarray(ar)).resize(shape))
-    return array
+        resized.append(np.array(Image.fromarray(onp.asarray(ar)).resize(shape)))
+    return np.asarray(resized)
