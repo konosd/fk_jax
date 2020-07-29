@@ -165,7 +165,7 @@ def stimulate(t, X, stimuli):
         # active = np.greater_equal(t, stimulus["start"])
         # active &= (np.mod(stimulus["start"] - t + 1, stimulus["period"]) < stimulus["duration"])
         active = np.greater_equal(t ,stimulus["start"])
-        active &= np.greater_equal(stimulus["start"] + stimulus["duration"],t)
+        # active &= np.greater_equal(stimulus["start"] + stimulus["duration"],t)
         active = (np.mod(t - stimulus["start"], stimulus["period"]) < stimulus["duration"]) # this works for cyclics
         stimulated = np.where(stimulus["field"] * (active), stimulus["field"], stimulated)
     return np.where(stimulated != 0, stimulated, X)
@@ -178,8 +178,8 @@ def current_stimulate(t, X, stimuli):
         # active = np.greater_equal(t, stimulus["start"])
         # active &= (np.mod(stimulus["start"] - t + 1, stimulus["period"]) < stimulus["duration"])
         active = np.greater_equal(t ,stimulus["start"])
-        active &= np.greater_equal(stimulus["start"] + stimulus["duration"],t)
-        active = (np.mod(t - stimulus["start"], stimulus["period"]) < stimulus["duration"]) # this works for cyclics
+        # active &= np.greater_equal(stimulus["start"] + stimulus["duration"],t)
+        active &= (np.mod(t - stimulus["start"], stimulus["period"]) < stimulus["duration"]) # this works for cyclics
         stimulated = np.where(stimulus["field"] * (active), stimulus["field"], stimulated)
     return np.where(stimulated != 0, stimulated, X)
 
