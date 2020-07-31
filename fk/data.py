@@ -41,7 +41,7 @@ def generate(start, stop, dt, dx, cell_parameters, diffusivity, stimuli, filenam
     print("Tissue size", tissue_size, "Grid size", diffusivity.shape)
     print("Checkpointing at:", checkpoints)
     print("Cell parameters", cell_parameters)
-    plot.show_stimuli(*stimuli)    
+    # plot.show_stimuli(*stimuli)    
 
     # init storage
     init_size = reshape or shape

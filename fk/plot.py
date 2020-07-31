@@ -48,7 +48,7 @@ def show(state, **kwargs):
     if save is not None:
         plt.savefig(save + '/state'+str(time)+".png", bbox_inches='tight')
     plt.show()
-    return fig, ax
+    return fig, ax 
 
 
 def show_grid(states, times=[], figsize=None, rows=5):
