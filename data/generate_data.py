@@ -42,10 +42,10 @@ shape = fk.convert.realsize_to_shape(field_size, dx)
 
 diffusivity_0 = np.ones(shape) * d
 
-diffusivity_field_1 = diffusivity.rectangular(shape, (2*shape[1]/3, 2*shape[0]/3), (int(shape[0]/3), int(shape[0]/3)), d, 0.7)
+diffusivity_1 = diffusivity.rectangular(shape, (2*shape[1]/3, 2*shape[0]/3), (int(shape[0]/3), int(shape[0]/3)), d, 0.7)
 
-diffusivity_field_2 = diffusivity.rectangular(shape, (2*shape[1]/3, 1*shape[0]/3), (int(shape[0]/3), int(shape[0]/3)), d, 0.3)
-diffusivity_field_3 = diffusivity.rectangular(shape, (1*shape[1]/3, 1*shape[0]/3), (int(shape[0]/3), int(shape[0]/3)), d, 0.5)
+diffusivity_2 = diffusivity.rectangular(shape, (2*shape[1]/3, 1*shape[0]/3), (int(shape[0]/3), int(shape[0]/3)), d, 0.3)
+diffusivity_3 = diffusivity.rectangular(shape, (1*shape[1]/3, 1*shape[0]/3), (int(shape[0]/3), int(shape[0]/3)), d, 0.5)
 
 diffusivity_fields = [diffusivity_0, diffusivity_1, diffusivity_2, diffusivity_3]
 
@@ -114,7 +114,7 @@ all_stimuli = [ [s1], [s3], [s1, s2], [s4, s5], [s6, s7], [s8,s9,s10] ]
 
 diff_names = ['dif0','dif1','dif2','dif3']
 all_stimuli_filenames = [str(s) for s in range(len(all_stimuli))]
-root = '/rds/general/user/kn119/home/data/fk_sims/train_dev_set/set5/'
+root = ''#/rds/general/user/kn119/home/data/fk_sims/train_dev_set/set5/'
 filenames = [root + 'set5_' + s + "_" + diff_name + ".hdf5" for s in all_stimuli_filenames for diff_name in diff_names]
 
 
@@ -136,7 +136,7 @@ for jd, diff in enumerate(diffusivity_fields):
 	                    cell_parameters=cell_parameters,
 	                    diffusivity=diff,
 	                    stimuli=stimuli,
-	                    filename= root + 'set5_' + i + "_" + diff_names[jd] + ".hdf5",#    filenames[i],
+	                    filename= root + 'set5_' + str(i) + "_" + diff_names[jd] + ".hdf5",#    filenames[i],
 	                    reshape=None)
 	    t1 = time.clock() - t0
 	    print("Time elapsed:{} min".format(t1/60)) # CPU seconds elapsed (floating point)

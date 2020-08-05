@@ -5,3 +5,5 @@ from . import model
 from . import params
 from . import plot
 from . import stimulus
+from . import diffusivity
+from . import electrogram
