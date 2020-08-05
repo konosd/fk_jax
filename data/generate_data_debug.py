@@ -61,7 +61,7 @@ s2 = stimulus.rectangular(shape, (shape[0]/2,shape[1]-stripe_size/2), (shape[0],
 
 
 all_stimuli = [ [s1], [s1, s2]]
-all_stimuli_filenames = [str(s) for s in range(len(all_stimuli))]
+all_stimuli_filenames = ['set_1a_'+str(s) for s in range(len(all_stimuli))]
 root = '/rds/general/user/kn119/home/data/fk_sims/train_dev_set/set1a/'
 filenames = [root + s + "_debug.hdf5" for s in all_stimuli_filenames]
 

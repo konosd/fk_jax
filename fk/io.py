@@ -24,7 +24,8 @@ def add_params(hdf5, params, diffusivity, dt, dx, shape=None):
     hdf5.create_dataset("params/dt", data=dt)
     hdf5.create_dataset("params/dx", data=dx)
     for key in params:
-        hdf5.create_dataset("params/" + key, data=params[key])
+        if key not in list(hdf5['params']):
+            hdf5.create_dataset("params/" + key, data=params[key])
     return True
 
 
@@ -94,3 +95,24 @@ def imresize(array, shape):
     for ar in array:
         resized.append(np.array(Image.fromarray(onp.asarray(ar)).resize(shape)))
     return np.asarray(resized)
+
+
+def resize_simulation(original_filepath, reshape_filename, reshape):
+    init_size = reshape
+    cell_parameters, diffusivity = load_params(filepath)
+    stimuli = load_stimuli(original_filepath)
+    with h5py.File(original_filepath, "r") as file:
+        original_states = file["states"]
+    dt = cell_parameters['dt']
+    dx = cell_parameters['dx']
+
+    hdf5 = init(reshape_filename, init_size, n_iter=original_states.shape[0], n_stimuli=len(stimuli))
+    add_params(hdf5, cell_parameters, diffusivity, dt, dx, shape=reshape)
+    add_stimuli(hdf5, stimuli, shape=reshape)
+    states_dset = hdf5["states"]
+    for i in range(len(original_states)):
+        add_state(states_dset, original_states[i], i,  shape = reshape)
+    hdf5.close()
+    return True
+    
+
