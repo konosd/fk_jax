@@ -99,20 +99,20 @@ def imresize(array, shape):
 
 def resize_simulation(original_filepath, reshape_filename, reshape):
     init_size = reshape
-    cell_parameters, diffusivity = load_params(filepath)
-    stimuli = load_stimuli(original_filepath)
+    cell_parameters, diffusivity = load_params(original_filepath)
     with h5py.File(original_filepath, "r") as file:
         original_states = file["states"]
-    dt = cell_parameters['dt']
-    dx = cell_parameters['dx']
+        stimuli = load_stimuli(file)
+        dt = cell_parameters['dt']
+        dx = cell_parameters['dx']
 
-    hdf5 = init(reshape_filename, init_size, n_iter=original_states.shape[0], n_stimuli=len(stimuli))
-    add_params(hdf5, cell_parameters, diffusivity, dt, dx, shape=reshape)
-    add_stimuli(hdf5, stimuli, shape=reshape)
-    states_dset = hdf5["states"]
-    for i in range(len(original_states)):
-        add_state(states_dset, original_states[i], i,  shape = reshape)
-    hdf5.close()
+        hdf5 = init(reshape_filename, init_size, n_iter=original_states.shape[0], n_stimuli=len(stimuli))
+        add_params(hdf5, cell_parameters, diffusivity, dt, dx, shape=reshape)
+        add_stimuli(hdf5, stimuli, shape=reshape)
+        states_dset = hdf5["states"]
+        for i in range(len(original_states)):
+            add_state(states_dset, original_states[i], i,  shape = reshape)
+        hdf5.close()
     return True
     
 

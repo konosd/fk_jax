@@ -3,7 +3,7 @@ import jax.numpy as np
 from scipy.ndimage.interpolation import rotate
 import random
 from fk import convert
-
+import numpy as onp
 
 def rectangular(shape, centre, size, diffusion, scar):
     """
@@ -112,5 +112,61 @@ def random_rectangular(shape, dx, diffusion, scar):
     return rand.fget()
 
 
-def circular(shape, centre, radius, protocol):
-    raise NotImplementedError
+def circular(shape, centre, radius, diffusion, scar):
+    """
+    Generates a rectangular scar given the center and the dimension of the rectangle.
+    Args:
+        shape (Tuple[int, int]): the shape of the scar array in simulation units (not cm)
+        centre (Tuple[int, int]): the carthesian coordinates of the centre of the rectangle in simulation units
+        radius (int): radius of circle in simulation units
+        diffusion (float): the conductivity of the regular tissue
+        scar (float): the conductivity of the scar tissue as a multiple of the normal diffusivity
+        protocol (Dict[str, int]): the time protocol used to manage the stimuli.
+                                   It's values are in simulation units (not ms)
+    Returns:
+        The np.array that will be used multiplied by diffusivity units, in the simulations.
+    """
+    difmap = np.ones(shape, dtype="float32")*diffusion
+    circle = np.array([[x,y] for x in range(-radius,radius+1) for y in range(-int((radius*radius-x*x)**0.5), int((radius*radius-x*x)**0.5)+1)])
+    circ_mask = circle + np.array(centre)
+    circ_mask = circ_mask[ (circ_mask[:,0]<shape[0]) & (circ_mask[:,1]<shape[0]) ]
+    circ_mask = circ_mask[ (circ_mask[:,0]>0) & (circ_mask[:,1]>0) ]
+    
+    ii = circ_mask[:,0]
+    jj = circ_mask[:,1]
+    
+    difmap = jax.ops.index_update(difmap, jax.ops.index[ii, jj], scar*diffusion)
+    return difmap
+
+
+def random_circular(shape, num_circles, min_radius, max_radius, diffusion, scar):
+    """
+    Generates a rectangular scar given the center and the dimension of the rectangle.
+    Args:
+        shape (Tuple[int, int]): the shape of the scar array in simulation units (not cm)
+        num_circles (int): the number of circles on the field
+        min_radius (int): minimum radius of circles in simulation units
+        diffusion (float): the conductivity of the regular tissue
+        scar (float): the conductivity of the scar tissue as a multiple of the normal diffusivity
+        protocol (Dict[str, int]): the time protocol used to manage the stimuli.
+                                   It's values are in simulation units (not ms)
+    Returns:
+        The np.array that will be used multiplied by diffusivity units, in the simulations.
+    """
+    difmap = np.ones(shape, dtype="float32")*diffusion
+    ii = []
+    jj = []
+    for c in range(num_circles):
+        radius = onp.random.randint(min_radius, max_radius)
+        center = (onp.random.randint(int(0.1*shape[0]), int(0.9*shape[0])), onp.random.randint(int(0.1*shape[1]), int(0.9*shape[1])))
+        circle = np.array([[x,y] for x in range(-radius,radius+1) for y in range(-int((radius*radius-x*x)**0.5), int((radius*radius-x*x)**0.5)+1)])
+        circ_mask = circle + np.array(center)
+        circ_mask = circ_mask[ (circ_mask[:,0]<shape[0]) & (circ_mask[:,1]<shape[0]) ]
+        circ_mask = circ_mask[ (circ_mask[:,0]>0) & (circ_mask[:,1]>0) ]
+
+        ii = circ_mask[:,0]
+        jj = circ_mask[:,1]
+        difmap = jax.ops.index_update(difmap, jax.ops.index[ii, jj], scar*diffusion)
+    return difmap
+
+
