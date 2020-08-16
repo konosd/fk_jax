@@ -41,8 +41,8 @@ def steady_probes(filepath, dt=1, dx=0.01, real_size = 12, scaled_size = 256):
 
     for i in range(states.shape[0]):
         u = states[i,2]
-        u_x = fk.model.gradient(u,0)/dx
-        u_y =  fk.model.gradient(u,1)/dx
+        u_x = gradient(u,0)/dx
+        u_y =  gradient(u,1)/dx
         val = -np.sum((u_y[:,:,np.newaxis]*(egm_y-yv[:,:,np.newaxis])+u_x[:,:,np.newaxis]*(egm_x-xv[:,:,np.newaxis]))*0.0001/(np.pi*4*2.36*1*np.sqrt((egm_x-xv[:,:,np.newaxis])**2+(egm_y-yv[:,:,np.newaxis])**2+10**(-2))**3), axis=(0,1)).reshape((4,4))   
         phi = jax.ops.index_update(phi, i, val)
         
