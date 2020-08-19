@@ -138,10 +138,12 @@ def gradient(a, axis):
     a_grad = jax.numpy.concatenate((
         # 3th order edge
         ((-11/6) * sliced(0, 2) + 3 * sliced(1, 3) - (3/2) * sliced(2, 4) + (1/3) * sliced(3, 5)),
+        # ((-25/12) * sliced(0, 2) + 4 * sliced(1, 3) - 3 * sliced(2, 4) + (4/3) * sliced(3, 5) - (1/4) * sliced(4,6)),
         # 4th order inner
         ((1/12) * sliced(None, -4) - (2/3) * sliced(1, -3) + (2/3) * sliced(3, -1) - (1/12) * sliced(4, None)),
         # 3th order edge
         ((-1/3) * sliced(-5, -3) + (3/2) * sliced(-4, -2) - 3 * sliced(-3, -1) + (11/6) * sliced(-2, None))
+        # ((1/4)*sliced(-6,-4) -(4/3) * sliced(-5, -3) + 3 * sliced(-4, -2) - 4 * sliced(-3, -1) + (25/12) * sliced(-2, None))
     ), axis)
     return a_grad
 
@@ -151,10 +153,16 @@ def neumann(X):
     # X = jax.ops.index_update(X, jax.ops.index[-1], X[-2])
     # X = jax.ops.index_update(X, jax.ops.index[..., 0], X[..., 1])
     # X = jax.ops.index_update(X, jax.ops.index[..., -1], X[..., -2])
+
     X = jax.ops.index_update(X, jax.ops.index[0], (18*X[1]/11 - 18*X[2]/22 + 6*X[3]/33))
     X = jax.ops.index_update(X, jax.ops.index[-1], (18*X[-2]/11 - 18*X[-3]/22 + 6*X[-4]/33))
     X = jax.ops.index_update(X, jax.ops.index[..., 0], (18*X[...,1]/11 - 18*X[...,2]/22 + 6*X[...,3]/33))
     X = jax.ops.index_update(X, jax.ops.index[..., -1], (18*X[...,-2]/11 - 18*X[...,-3]/22 + 6*X[...,-4]/33))
+
+    # X = jax.ops.index_update(X, jax.ops.index[0], (48*X[1]/25 - 36*X[2]/25 + 48*X[3]/75 - 12*X[4]/100))
+    # X = jax.ops.index_update(X, jax.ops.index[-1], (48*X[-2]/25 - 36*X[-3]/25 + 48*X[-4]/75 -12*X[-5]/100))
+    # X = jax.ops.index_update(X, jax.ops.index[..., 0], (48*X[...,1]/25 - 36*X[...,2]/25 + 48*X[...,3]/75 -12*X[...,4]/100))
+    # X = jax.ops.index_update(X, jax.ops.index[..., -1], (48*X[...,-2]/25 - 36*X[...,-3]/25 + 48*X[...,-4]/75 - 12*X[...,-5]/100))
     return X
 
 

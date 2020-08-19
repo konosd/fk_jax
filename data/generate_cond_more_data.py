@@ -1,5 +1,4 @@
 
-
 import os
 import random
 import h5py
@@ -122,8 +121,7 @@ stop = 2000  # ms
 
 for jd in range(10):
 
-	diffusivity_field = diffusivity.rectangular(shape, (onp.random.uniform(0.32, 0.65)*shape[0], onp.random.uniform(0.32, 0.65)*shape[0]),
-	(onp.random.uniform(0.1, 0.6)*shape[0], onp.random.uniform(0.1, 0.6)*shape[0]), d, onp.random.uniform(0.1, 0.8))
+	diffusivity_field = diffusivity.random_rectangular(shape, 2, 300, 600, 0.001, 0.6)
 	
 	for i, stimuli in enumerate(all_stimuli):
 	    t0= time.clock()
@@ -135,9 +133,47 @@ for jd in range(10):
 	                    cell_parameters=cell_parameters,
 	                    diffusivity=diffusivity_field,
 	                    stimuli=stimuli,
-	                    filename= root + 'set5_' + str(i) + "_" + str(jd+5) + ".hdf5",#    filenames[i],
+	                    filename= root + 'set5_' + str(i) + "_" + str(jd+15) + ".hdf5",#    filenames[i],
 	                    reshape=None)
 	    t1 = time.clock() - t0
 	    print("Time elapsed:{} min".format(t1/60)) # CPU seconds elapsed (floating point)
 
 
+for jd in range(10):
+
+	diffusivity_field = diffusivity.random_rectangular(shape, 3, 300, 600, 0.001, 0.6)
+	
+	for i, stimuli in enumerate(all_stimuli):
+	    t0= time.clock()
+	    print("Starting set "+ all_stimuli_filenames[i])
+
+	    fk.data.generate(start=fk.convert.ms_to_units(start, dt),
+	                    stop=fk.convert.ms_to_units(stop, dt),
+	                    dt=dt, dx=dx,
+	                    cell_parameters=cell_parameters,
+	                    diffusivity=diffusivity_field,
+	                    stimuli=stimuli,
+	                    filename= root + 'set5_' + str(i) + "_" + str(jd+25) + ".hdf5",#    filenames[i],
+	                    reshape=None)
+	    t1 = time.clock() - t0
+	    print("Time elapsed:{} min".format(t1/60)) # CPU seconds elapsed (floating point)
+
+
+for jd in range(10):
+
+	diffusivity_field = diffusivity.random_rectangular(shape, 4, 300, 600, 0.001, 0.6)
+	
+	for i, stimuli in enumerate(all_stimuli):
+	    t0= time.clock()
+	    print("Starting set "+ all_stimuli_filenames[i])
+
+	    fk.data.generate(start=fk.convert.ms_to_units(start, dt),
+	                    stop=fk.convert.ms_to_units(stop, dt),
+	                    dt=dt, dx=dx,
+	                    cell_parameters=cell_parameters,
+	                    diffusivity=diffusivity_field,
+	                    stimuli=stimuli,
+	                    filename= root + 'set5_' + str(i) + "_" + str(jd+35) + ".hdf5",#    filenames[i],
+	                    reshape=None)
+	    t1 = time.clock() - t0
+	    print("Time elapsed:{} min".format(t1/60)) # CPU seconds elapsed (floating point)

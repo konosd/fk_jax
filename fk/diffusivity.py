@@ -100,16 +100,34 @@ def random_triangular(shape, diffusion, scar):
     return rand.fget()
 
 
-def random_rectangular(shape, dx, diffusion, scar):
-    @property
-    def rand(key):
-        x1 = random.random() * (shape[0] - 1)
-        x2 = random.random() * (shape[1] - 1)
-        centre = (x1, x2)
-        size = convert.realsize_to_shape((1, 1), dx)
-        stim = rectangular(shape, centre, size, diffusion, scar)
-        return stim
-    return rand.fget()
+def random_rectangular(shape, num_rectangles, min_side, max_side, diffusion, scar):
+    """
+    Generates a rectangular scar given the center and the dimension of the rectangle.
+    Args:
+        shape (Tuple[int, int]): the shape of the scar array in simulation units (not cm)
+        num_rectangles (int): the number of rectangles on the field
+        min_side (int): minimum side of rectangles in simulation units
+        diffusion (float): the conductivity of the regular tissue
+        scar (float): the conductivity of the scar tissue as a multiple of the normal diffusivity
+    Returns:
+        The np.array that will be used multiplied by diffusivity units, in the simulations.
+    """
+    difmap = np.ones(shape, dtype="float32")*diffusion
+    ii = []
+    jj = []
+    for c in range(num_rectangles):
+        side_x = onp.random.randint(min_side, max_side)
+        side_y = onp.random.randint(min_side, max_side)
+        center = (onp.random.randint(int(0.1*shape[0]), int(0.9*shape[0])), onp.random.randint(int(0.1*shape[1]), int(0.9*shape[1])))
+        rectangle = np.array([[x,y] for x in range(-side_x//2,side_x//2+1) for y in range(-side_y//2,side_y//2+1)])
+        rect_mask = rectangle + np.array(center)
+        rect_mask = rect_mask[ (rect_mask[:,0]<shape[0]) & (rect_mask[:,1]<shape[0]) ]
+        rect_mask = rect_mask[ (rect_mask[:,0]>0) & (rect_mask[:,1]>0) ]
+
+        ii = rect_mask[:,0]
+        jj = rect_mask[:,1]
+        difmap = jax.ops.index_update(difmap, jax.ops.index[ii, jj], scar*diffusion)
+    return difmap
 
 
 def circular(shape, centre, radius, diffusion, scar):
